@@ -7,7 +7,10 @@ public class Collectible : MonoBehaviour
 
     AudioSource audioSource;
     Animator animator;
-    public GameObject particles;
+
+    [SerializeField]
+    GameObject particles;
+    
 
     private void Start()
     {
@@ -20,6 +23,9 @@ public class Collectible : MonoBehaviour
         audioSource.Play();
         animator.SetTrigger("isCollected");
         particles.SetActive(true);
+        GetComponent<Collider>().enabled = false; //turn off collider so that we dont collect twice
+
+        GameManager.GM.gemsCollected++; //add 1 to score
         Invoke("Despawn", 1f);
         
     }

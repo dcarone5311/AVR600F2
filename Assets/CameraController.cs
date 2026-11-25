@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
 
-    public float maxDist, minDist, scrollSpeed, smooth, vertSpeed;
+    public float maxDist, minDist, scrollSpeed, smooth, vertSpeed,  maxAngle, minAngle;
     
     
     
@@ -28,13 +28,17 @@ public class CameraController : MonoBehaviour
         float vertMove = Input.GetMouseButton(1) ? Input.GetAxis("Mouse Y") : 0; //if right clicking
 
         transform.Rotate(Vector3.right * vertMove * vertSpeed * Time.deltaTime);
+        
+        float vertAngle = transform.eulerAngles.x;
+        Debug.Log(vertAngle);
+        vertAngle = Mathf.Clamp(vertAngle > 90 ? vertAngle - 360f: vertAngle, minAngle, maxAngle);
+        transform.localRotation = Quaternion.Euler(vertAngle, 0, 0);
 
 
-        Debug.Log(targetDistance);
 
         currentDistance = Mathf.Lerp(currentDistance, targetDistance, smooth * Time.deltaTime);
 
-        transform.localPosition = -transform.InverseTransformVector(transform.forward) * currentDistance;
+        transform.localPosition = -transform.parent.InverseTransformVector(transform.forward) * currentDistance;
 
 
     }
